@@ -230,6 +230,12 @@
 					pinctrl-0 = <&pinctrl_mikrobus_spi &pinctrl_mikrobus1_spi_cs &pinctrl_mikrobus2_spi_cs>;
 					atmel,fifo-size = <16>;
 					status = "okay"; /* Conflict with uart6 and i2c3. */
+
+					spidev@1 {
+						compatible = "spidev";
+						reg = <1>;
+						spi-max-frequency = <1000000>;
+					}
 				};
 
 				i2c3: i2c@600 {
