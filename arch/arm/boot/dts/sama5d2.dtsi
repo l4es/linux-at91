@@ -807,7 +807,7 @@
 				#address-cells = <1>;
 				#size-cells = <1>;
 				ranges = <0x0 0xfc018000 0x800>;
-				status = "disabled";
+				status = "okay";
 			};
 
 			trng@fc01c000 {
