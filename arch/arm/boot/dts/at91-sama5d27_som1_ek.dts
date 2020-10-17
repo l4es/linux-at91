@@ -232,7 +232,7 @@
 					status = "okay"; /* Conflict with uart6 and i2c3. */
 
 					spidev@1 {
-						compatible = "spidev";
+						compatible = "atmel,at91rm9200-spidev";
 						reg = <1>;
 						spi-max-frequency = <1000000>;
 					};
