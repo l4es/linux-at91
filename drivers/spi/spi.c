@@ -390,11 +390,13 @@ static int spi_drv_probe(struct device *dev)
 	int ret;
 
 	ret = of_clk_set_defaults(dev->of_node, false);
+	dev_dbg(dev, "SPI of_clk_set_defaults() returns %d", ret);
 	if (ret)
 		return ret;
 
 	if (dev->of_node) {
 		spi->irq = of_irq_get(dev->of_node, 0);
+		dev_dbg(dev, "SPI of_irq_get() returns %d", spi->irq);
 		if (spi->irq == -EPROBE_DEFER)
 			return -EPROBE_DEFER;
 		if (spi->irq < 0)
@@ -402,6 +404,7 @@ static int spi_drv_probe(struct device *dev)
 	}
 
 	ret = dev_pm_domain_attach(dev, true);
+	dev_dbg(dev, "SPI dev_pm_domain_attach() returns %d", ret);
 	if (ret)
 		return ret;
 
@@ -409,6 +412,7 @@ static int spi_drv_probe(struct device *dev)
 	if (ret)
 		dev_pm_domain_detach(dev, true);
 
+	dev_dbg(dev, "SPI spi_drv_probe() returns %d", ret);
 	return ret;
 }
 

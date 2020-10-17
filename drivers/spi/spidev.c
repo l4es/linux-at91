@@ -760,6 +760,7 @@ static int spidev_probe(struct spi_device *spi)
 				    spidev, "spidev%d.%d",
 				    spi->master->bus_num, spi->chip_select);
 		status = PTR_ERR_OR_ZERO(dev);
+		dev_dbg(&spi->dev, "SPIDEV PTR_ERR_OR_ZERO() returns %d!\n", status);
 	} else {
 		dev_dbg(&spi->dev, "no minor number available!\n");
 		status = -ENODEV;
@@ -776,6 +777,8 @@ static int spidev_probe(struct spi_device *spi)
 		spi_set_drvdata(spi, spidev);
 	else
 		kfree(spidev);
+	
+	dev_dbg(&spi->dev, "SPIDEV spidev_probe() returns %d!\n", status);
 
 	return status;
 }
