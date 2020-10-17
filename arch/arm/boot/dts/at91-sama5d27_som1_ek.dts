@@ -235,7 +235,7 @@
 						compatible = "spidev";
 						reg = <1>;
 						spi-max-frequency = <1000000>;
-					}
+					};
 				};
 
 				i2c3: i2c@600 {
