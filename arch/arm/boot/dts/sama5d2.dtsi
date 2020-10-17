@@ -803,11 +803,18 @@
 			flx4: flexcom@fc018000 {
 				compatible = "atmel,sama5d2-flexcom";
 				reg = <0xfc018000 0x200>;
-				clocks = <&pmc PMC_TYPE_PERIPHERAL 23>;
+//				clocks = <&pmc PMC_TYPE_PERIPHERAL 23>;
+				clocks = <&flx4_clk>;
 				#address-cells = <1>;
 				#size-cells = <1>;
 				ranges = <0x0 0xfc018000 0x800>;
 				status = "okay";
+			};
+
+			flx4_clk: flx4_clk {
+				#clock-cells = <0>;
+				reg = <23>;
+				atmel,clk-output-range = <0 83000000>;
 			};
 
 			trng@fc01c000 {
