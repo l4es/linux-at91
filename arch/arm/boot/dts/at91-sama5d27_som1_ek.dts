@@ -86,7 +86,7 @@
 
 			spi1: spi@fc000000 {
 				status = "okay";
-			}
+			};
 
 			macb0: ethernet@f8008000 {
 				status = "okay";
