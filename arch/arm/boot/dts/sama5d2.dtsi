@@ -460,7 +460,7 @@
 				atmel,fifo-size = <16>;
 				#address-cells = <1>;
 				#size-cells = <0>;
-				status = "disabled";
+				status = "okay";
 			};
 
 			ssc0: ssc@f8004000 {
@@ -745,7 +745,7 @@
 				atmel,fifo-size = <16>;
 				#address-cells = <1>;
 				#size-cells = <0>;
-				status = "disabled";
+				status = "okay";
 			};
 
 			uart3: serial@fc008000 {

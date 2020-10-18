@@ -200,7 +200,7 @@
 					pinctrl-names = "default";
 					pinctrl-0 = <&pinctrl_flx3_default>;
 					atmel,fifo-size = <16>;
-					status = "disabled"; /* Conflict with isc. */
+					status = "okay"; /* Conflict with isc. */
 				};
 			};
 
