@@ -2341,3 +2341,17 @@ config FB_SM712
 	  This driver is also available as a module. The module will be
 	  called sm712fb. If you want to compile it as a module, say M
 	  here and read <file:Documentation/kbuild/modules.txt>.
+
+config FB_LS0XXB7DXXX
+	tristate "LS032B7DD02-3.2 inch MIP monochrome LCD framebuffer support"
+	depends on FB && SPI
+	depends on OF
+	depends on GPIOLIB
+	select FB_SYS_FOPS
+	select FB_SYS_FILLRECT
+	select FB_SYS_COPYAREA
+	select FB_SYS_IMAGEBLIT
+	select FB_DEFERRED_IO
+	help
+	  This driver implements support for the Sharp LS027B7DH01, LS032B7DD02
+	  LCD controller over SPI.
