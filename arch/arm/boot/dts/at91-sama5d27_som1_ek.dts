@@ -107,11 +107,8 @@
 					spi-max-frequency = <32000000>;
 					rotation = <0>;
 					pinctrl-names = "default";
-					pinctrl-0 = <&pinctrl_mikrobus_display>;
-					gpios = <&pioC PIN_PC4 GPIO_ACTIVE_HIGH>, <&pioC PIN_PC3 GPIO_ACTIVE_HIGH>;
-					//dc-gpios = <&pioC PIN_PC4 GPIO_ACTIVE_HIGH>;
-					//reset-gpios = <&pioC PIN_PC3 GPIO_ACTIVE_HIGH>;
-					//backlight = <&backlight>;
+					//pinctrl-0 = <&pinctrl_mikrobus_display>;
+					gpios = <&pioA PIN_PC4 GPIO_ACTIVE_HIGH>, <&pioA PIN_PC3 GPIO_ACTIVE_HIGH>;
 					status = "okay";
 				};
 			};
