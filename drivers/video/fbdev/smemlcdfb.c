@@ -257,6 +257,11 @@ static struct smemlcd_info ls013b7dh03_info = {
 	.height = 128,
 };
 
+static struct smemlcd_info ls032b7dd02_info = {
+        .width = 536,
+        .height = 336,
+};
+
 static const struct of_device_id smemlcd_of_match[] = {
 	{
 	 .compatible = "sharp,ls027b7dh01",
@@ -273,6 +278,10 @@ static const struct of_device_id smemlcd_of_match[] = {
 	{
 	 .compatible = "sharp,ls013b7dh03",
 	 .data = (void *)&ls013b7dh03_info,
+	 },
+	{
+	 .compatible = "sharp,ls032b7dd02",
+	 .data = (void *)&sharp,ls032b7dd02_info,
 	 },
 	{},
 };
@@ -483,6 +492,7 @@ static const struct spi_device_id smemlcd_spi_id[] = {
 	{"ls044q7dh01", 0},
 	{"ls013b7dh05", 0},
 	{"ls013b7dh03", 0},
+	{"ls032b7dd02", 0},
 	{}
 };
 MODULE_DEVICE_TABLE(spi, smemlcd_spi_id);
