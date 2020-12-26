@@ -2342,6 +2342,20 @@ config FB_SM712
 	  called sm712fb. If you want to compile it as a module, say M
 	  here and read <file:Documentation/kbuild/modules.txt>.
 
+config FB_SMEMLCD
+	tristate "Sharp Memory LCD framebuffer support"
+	depends on FB && SPI
+	depends on OF
+	depends on GPIOLIB || COMPILE_TEST
+	select FB_SYS_FOPS
+	select FB_SYS_FILLRECT
+	select FB_SYS_COPYAREA
+	select FB_SYS_IMAGEBLIT
+	select FB_DEFERRED_IO
+	select PWM
+	help
+	  This driver implements support for the Sharp Memory LCD
+
 config FB_LS0XXB7DXXX
 	tristate "LS032B7DD02-3.2 inch MIP monochrome LCD framebuffer support"
 	depends on FB && SPI

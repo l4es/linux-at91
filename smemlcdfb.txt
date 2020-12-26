@@ -1,0 +1,46 @@
+Sharp Memory LCD Linux Framebuffer Driver
+
+Required properties:
+  - compatible: It should be "sharp,<model-no>". The supported displays are 
+         ls027b7dh01, ls044q7dh01, ls013b7dh05, ls013b7dh03. Maybe other 
+         monochromatic models can be supported with the current code.
+  - reg: SPI chip select number for the device.
+  - spi-max-frequency: Max SPI frequency to use. One must verify the datasheet.
+  - spi-cs-high: Sharp Memory LCD needs chipselect high.
+
+Optional properties:
+  - sharp,frames-per-sec: It should contain the desired frames per second.
+         It does not represent the actual frame rate. Default: 10
+  - sharp,extmode-high: External COM Input signal is expected in EXTCOMIN port.
+         This is recommended to reduce CPU and SPI Load.
+  - pwm: If property "sharp,extmode-high" is specified, this is recommended.
+         It should contain the pwm to use, according to
+         Documentation/devicetree/bindings/pwm/pwm.txt
+         Verify the display datasheet for the EXTCOMIN signal period
+  - disp-gpios: The GPIO used to enable the display, if available. See
+                 Documentation/devicetree/bindings/gpio/gpio.txt for details.
+
+Examples:
+
+ls027b7dh01: smemlcd@0 {
+        compatible = "sharp,ls027b7dh01";
+        reg = <0>;
+        spi-max-frequency = <1000000>;
+        spi-cs-high;
+        disp-gpios = <&gpio0 7>;
+        disp-active-high;
+        sharp,extmode-high;
+        pwms = <&pwm 0 100000000>;
+};
+
+ls013b7dh05: smemlcd@3 {
+        compatible = "sharp,ls013b7dh05";
+        reg = <3>;
+        spi-max-frequency = <1000000>;
+        spi-cs-high;
+        disp-gpios = <&gpio0 13>;
+        disp-active-high;
+        sharp,extmode-high;
+        pwms = <&pwm 0 50000000>;
+        sharp,frames-per-sec = <20>;
+};
