@@ -112,7 +112,7 @@
 					//pinctrl-0 = <&pinctrl_mikrobus_display>;
 					//gpios = <&pioA PIN_PC4 GPIO_ACTIVE_HIGH>, <&pioA PIN_PC3 GPIO_ACTIVE_HIGH>;
 
-					disp-gpios = <&gpioA PIN_PC4>;
+					disp-gpios = <&pioA PIN_PC4>;
 					disp-active-high;
 					//sharp,extmode-high;
 					//pwms = <&hlcdc_pwm 0 50000 0>;

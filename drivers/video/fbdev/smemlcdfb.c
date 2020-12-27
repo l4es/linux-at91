@@ -281,7 +281,7 @@ static const struct of_device_id smemlcd_of_match[] = {
 	 },
 	{
 	 .compatible = "sharp,ls032b7dd02",
-	 .data = (void *)&sharp,ls032b7dd02_info,
+	 .data = (void *)&ls032b7dd02_info,
 	 },
 	{},
 };
