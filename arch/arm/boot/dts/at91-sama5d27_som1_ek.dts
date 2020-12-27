@@ -104,11 +104,19 @@
 				display@0 {
 					compatible = "sharp,ls032b7dd02";
 					reg = <0>;
-					spi-max-frequency = <32000000>;
-					rotation = <0>;
-					pinctrl-names = "default";
+					spi-max-frequency = <1000000>;
+					spi-cs-high;
+
+					//rotation = <0>;
+					//pinctrl-names = "default";
 					//pinctrl-0 = <&pinctrl_mikrobus_display>;
-					gpios = <&pioA PIN_PC4 GPIO_ACTIVE_HIGH>, <&pioA PIN_PC3 GPIO_ACTIVE_HIGH>;
+					//gpios = <&pioA PIN_PC4 GPIO_ACTIVE_HIGH>, <&pioA PIN_PC3 GPIO_ACTIVE_HIGH>;
+
+					disp-gpios = <&gpioA PIN_PC4>;
+					disp-active-high;
+					//sharp,extmode-high;
+					//pwms = <&hlcdc_pwm 0 50000 0>;
+					sharp,frames-per-sec = <20>;
 					status = "okay";
 				};
 			};
