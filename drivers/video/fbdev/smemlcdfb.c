@@ -194,8 +194,8 @@ static ssize_t smemlcd_write(struct fb_info *info, const char __user * buf, size
 		mutex_lock(&par->update_lock);
 		req_start = max((int)(offset / par->vmem_width), 0);
 		req_height = ret / par->vmem_width + 1;
-		dev_dbg(&spi->dev, "%s : reg_start = %d, reg_height = %d }.\n",
-                                    __func__, reg_start, reg_height);
+		dev_dbg(&spi->dev, "%s : req_start = %d, req_height = %d }.\n",
+                                    __func__, req_start, req_height);
 		smemlcd_frame(par, req_start, req_height);
 		if(par->extmode)
 			smemlcd_update(par);
