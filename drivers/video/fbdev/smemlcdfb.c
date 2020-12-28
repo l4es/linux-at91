@@ -73,6 +73,9 @@ static void smemlcd_update(struct smemlcd_par *par)
 	int ret;
 	u32 i,j;
 
+	dev_dbg(&spi->dev, "%s : par = { .start = %d, .height = %d, info = { .var = { .xres = %d, yres = %d } } }.\n",
+                            __func__, par->start, par->height, par->info->var.xres, par->info->var.yres);
+
 	if (par->start + par->height > par->info->var.yres) {
 		par->start = 0;
 		par->height = 0;
@@ -83,6 +86,9 @@ static void smemlcd_update(struct smemlcd_par *par)
 	par->vcom ^= SMEMLCD_FRAME_INVERSION;
 	/* mode selection */
 	*(buf_ptr++) = (par->height)? (SMEMLCD_DATA_UPDATE | par->vcom) : par->vcom;
+
+	 dev_dbg(&spi->dev, "%s : par = { .vmem = %d, .vcom = %x }.\n",
+                            __func__, par->vmem_width, par->vcom);
 
 	/* not all SPI masters have LSB-first mode, bitrev8 is used */
 	for (i = par->start + 1; i < par->start + par->height + 1; i++) {
@@ -110,8 +116,13 @@ static void smemlcd_update(struct smemlcd_par *par)
 
 static void smemlcd_frame(struct smemlcd_par *par, u32 req_start, u32 req_height)
 {
+	struct spi_device *spi = par->spi;
 	u32 end = par->start + par->height;
 	u32 req_end = req_start + req_height;
+
+	dev_dbg(&spi->dev, "%s : par = { .start = %d, .height = %d }, req_start = %d, req_height = %d.\n",
+                            __func__, par->start, par->height, req_start, req_height);
+
 	if (req_end > par->info->var.yres)
 		req_end = par->info->var.yres;
 	if (par->start > req_start)
@@ -119,11 +130,18 @@ static void smemlcd_frame(struct smemlcd_par *par, u32 req_start, u32 req_height
 	if (end < req_end || end > par->info->var.yres)
 		end = req_end;
 	par->height = end - par->start;
+
+        dev_dbg(&spi->dev, "%s : par = { .start = %d, .height = %d }, req_start = %d, req_height = %d.\n",
+                            __func__, par->start, par->height, req_start, req_height);
 }
 
 static void smemlcd_fillrect(struct fb_info *info, const struct fb_fillrect *rect)
 {
 	struct smemlcd_par *par = info->par;
+	struct spi_device *spi = par->spi;
+	dev_dbg(&spi->dev, "%s : rec = { .dy = %d, .height = %d }.\n",
+                            __func__, rect->dy, rect->height);
+
 	sys_fillrect(info, rect);
 
 	mutex_lock(&par->update_lock);
@@ -136,6 +154,9 @@ static void smemlcd_fillrect(struct fb_info *info, const struct fb_fillrect *rec
 static void smemlcd_imageblit(struct fb_info *info, const struct fb_image *image)
 {
 	struct smemlcd_par *par = info->par;
+        struct spi_device *spi = par->spi;
+        dev_dbg(&spi->dev, "%s : image = { .dy = %d, .height = %d }.\n",
+                            __func__, image->dy, image->height);
 	sys_imageblit(info, image);
 
 	mutex_lock(&par->update_lock);
@@ -148,6 +169,9 @@ static void smemlcd_imageblit(struct fb_info *info, const struct fb_image *image
 static void smemlcd_copyarea(struct fb_info *info, const struct fb_copyarea *area)
 {
 	struct smemlcd_par *par = info->par;
+	struct spi_device *spi = par->spi;
+        dev_dbg(&spi->dev, "%s : area = { .dy = %d, .height = %d }.\n",
+                            __func__, area->dy, area->height);
 	sys_copyarea(info, area);
 
 	mutex_lock(&par->update_lock);
@@ -161,6 +185,7 @@ static ssize_t smemlcd_write(struct fb_info *info, const char __user * buf, size
 {
 	ssize_t ret;
 	struct smemlcd_par *par = info->par;
+	struct spi_device *spi = par->spi;
 	u32 req_start, req_height;
 	u32 offset = (u32) * ppos;
 
@@ -169,6 +194,8 @@ static ssize_t smemlcd_write(struct fb_info *info, const char __user * buf, size
 		mutex_lock(&par->update_lock);
 		req_start = max((int)(offset / par->vmem_width), 0);
 		req_height = ret / par->vmem_width + 1;
+		dev_dbg(&spi->dev, "%s : reg_start = %d, reg_height = %d }.\n",
+                                    __func__, reg_start, reg_height);
 		smemlcd_frame(par, req_start, req_height);
 		if(par->extmode)
 			smemlcd_update(par);
@@ -181,6 +208,9 @@ static ssize_t smemlcd_write(struct fb_info *info, const char __user * buf, size
 static int smemlcd_blank(int blank_mode, struct fb_info *info)
 {
 	struct smemlcd_par *par = info->par;
+	struct spi_device *spi = par->spi;
+	dev_dbg(&spi->dev, "%s : blank_mode = %d.\n",
+                            __func__, blank_mode);
 
 	if (par->disp) {
 		if (blank_mode != FB_BLANK_UNBLANK)
@@ -195,6 +225,9 @@ static int smemlcd_blank(int blank_mode, struct fb_info *info)
 static void smemlcd_deferred_io(struct fb_info *info, struct list_head *pagelist)
 {
 	struct smemlcd_par *par = info->par;
+	struct spi_device *spi = par->spi;
+	dev_dbg(&spi->dev, "%s.\n",
+                            __func__);
 
 	mutex_lock(&par->update_lock);
 
@@ -202,6 +235,8 @@ static void smemlcd_deferred_io(struct fb_info *info, struct list_head *pagelist
 		struct page *cur;
 		u32 req_start;
 		u32 req_height = (PAGE_SIZE / par->vmem_width) + 1;
+		dev_dbg(&spi->dev, "%s : req_start = %d, req_height = %d.\n",
+                            __func__, req_start, req_height);
 
 		list_for_each_entry(cur, pagelist, lru) {
 			req_start = (cur->index << PAGE_SHIFT) / par->vmem_width;
@@ -218,6 +253,9 @@ static void smemlcd_update_work(struct work_struct *work)
 {
 	struct smemlcd_par *par = container_of(work, struct smemlcd_par, d_work.work);
 	struct fb_info *info = par->info;
+	struct spi_device *spi = par->spi;
+	dev_dbg(&spi->dev, "%s.\n",
+                            __func__);
 
 	mutex_lock(&par->update_lock);
 	smemlcd_update(par);
@@ -326,6 +364,8 @@ static int smemlcd_probe(struct spi_device *spi)
 	par->vcom = 0;
 	par->start = 0;
 	par->height = 0;
+	dev_dbg(&spi->dev, "%s : par = { .spi_width = %d, .vmem_width = %d }.\n",
+                            __func__, par->spi_width, par->vmem_width);
 
 	par->spi_buf = kzalloc(devinfo->height * (par->spi_width + 2) + 2, GFP_KERNEL);
 	if (!par->spi_buf) {
@@ -335,6 +375,8 @@ static int smemlcd_probe(struct spi_device *spi)
 	}
 
 	vmem_size = par->vmem_width * devinfo->height;
+	dev_dbg(&spi->dev, "%s : vmem_size = %d.\n",
+                            __func__, vmem_size);
 
 	vmem = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, get_order(vmem_size));
 	if (!vmem) {
@@ -363,6 +405,8 @@ static int smemlcd_probe(struct spi_device *spi)
 	info->var.xres_virtual = devinfo->width;
 	info->var.yres = devinfo->height;
 	info->var.yres_virtual = devinfo->height;
+        dev_dbg(&spi->dev, "%s : info = { .var =  { .xres = %d, .yres = %d } }.\n",
+                            __func__, info->var.xres, info->var.yres);
 
 	info->screen_base = (u8 __force __iomem *) vmem;
 	info->screen_size = vmem_size;
