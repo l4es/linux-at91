@@ -296,8 +296,8 @@ static struct smemlcd_info ls013b7dh03_info = {
 };
 
 static struct smemlcd_info ls032b7dd02_info = {
-        .width = 536,
-        .height = 336,
+        .width = 336,
+        .height = 536,
 };
 
 static const struct of_device_id smemlcd_of_match[] = {
